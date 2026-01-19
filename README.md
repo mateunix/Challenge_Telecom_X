@@ -1,55 +1,62 @@
-#📡 Telecom X - Análise de Evasão de Clientes (Churn)
-##📋 Sobre o Projeto
-A Telecom X enfrenta um desafio crítico: uma alta taxa de cancelamento de clientes (Churn). Este projeto de Data Analytics tem como objetivo identificar os perfis de risco, entender os motivos da evasão e fornecer recomendações baseadas em dados para a equipe de negócios.
+# 📡 Telecom X - Relatório de Análise de Churn
 
-O projeto abrange desde a extração de dados brutos (API/JSON) até a análise exploratória e visualização estratégica.
+![Python](https://img.shields.io/badge/Python-3.14-blue) ![Status](https://img.shields.io/badge/Status-Concluído-green)
 
-##🛠️ Pipeline de Dados (ETL)
-O script main.py executa um fluxo de trabalho automatizado:
+## 1. Visão Geral do Problema
+A Telecom X enfrenta um desafio de retenção de clientes. O objetivo desta análise foi identificar os principais fatores que levam ao cancelamento (Churn) para orientar as estratégias da equipe de negócios.
 
-Extração: Coleta de dados via requisição HTTP (simulação de API) de um dataset JSON aninhado.
+### O Cenário Atual
+Abaixo, visualizamos a proporção exata de clientes que cancelaram o serviço versus os que permaneceram.
 
-Transformação (Normalização): Uso de pd.json_normalize para "achatar" colunas complexas (customer, phone, internet, account).
+![Distribuição de Evasão](1_distribuicao_evasao.png)
+*Figura 1: A taxa de evasão (Churn Rate) global da base de clientes.*
 
-Limpeza (Data Cleaning):
+---
 
-Tratamento de strings vazias na variável alvo (Churn).
+## 2. Perfil do Cliente de Risco
+Investigamos como características contratuais e pessoais influenciam a decisão de sair. Cruzamos dados de Gênero, Internet, Contrato e Pagamento.
 
-Conversão de Charges.Total de texto para float.
+### Principais Descobertas:
+* **Contratos Mensais:** Representam o maior volume de cancelamentos.
+* **Internet:** Usuários de Fibra Óptica cancelam mais que os de DSL.
+* **Pagamento:** O "Cheque Eletrônico" é o método com maior fricção/saída.
 
-Padronização de textos (remoção de espaços).
+![Análise de Categorias](2_analise_categorias.png)
+*Figura 2: Comparativo de Evasão por categorias (Contrato, Pagamento, etc).*
 
-Engenharia de Atributos (Feature Engineering):
+---
 
-Criação de Custo_Diario (Mensalidade / 30).
+## 3. Comportamento Financeiro e Fidelidade
+Analisamos se o preço (`Mensalidade`) e o tempo de casa (`Tenure`) são determinantes.
 
-Criação de Qtd_Servicos (Soma dos serviços adicionais contratados).
+* **Tempo de Casa:** Clientes novos (poucos meses) são os mais vulneráveis.
+* **Preço:** Existe uma tendência de saída em faixas de preço mais elevadas.
 
-Padronização: Tradução de todas as colunas para Português e codificação de variáveis binárias (Sim/Não → 1/0).
+![Boxplots Numéricos](3_analise_numerica_boxplots.png)
+*Figura 3: Distribuição de mensalidades e tempo de contrato entre clientes retidos vs. evadidos.*
 
-##📊 Principais Descobertas e Insights
-Com base na Análise Exploratória de Dados (EDA), identificamos os seguintes padrões de comportamento:
+---
 
-1. O Fator Contratual 🚨
-Diagnóstico: Clientes com Contrato Mensal representam a esmagadora maioria das evasões.
+## 4. Fatores Determinantes (Estatística)
+Para confirmar as hipóteses, calculamos a correlação matemática de todas as variáveis com a Evasão.
 
-Dado: A taxa de churn cai drasticamente em contratos de 1 ou 2 anos.
+### O Que Mais Impacta o Cancelamento?
+O gráfico abaixo mostra o ranking de impacto. Barras para a **direita (Positivas)** aumentam o risco de churn. Barras para a **esquerda (Negativas)** ajudam a reter o cliente.
 
-Ação Sugerida: Criar campanhas agressivas de migração para planos anuais, oferecendo descontos ou benefícios exclusivos.
+![Ranking de Fatores](5_ranking_fatores.png)
+*Figura 4: Ranking de correlação. Note como 'Contrato Mensal' puxa para o risco e 'Tenure' (tempo) puxa para a retenção.*
 
-2. Tecnologia e Preço 💸
-Diagnóstico: Usuários de Fibra Óptica tendem a cancelar mais do que usuários de DSL, apesar de ser uma tecnologia superior.
+### Matriz de Correlação Detalhada
+Visão técnica completa das relações entre todas as variáveis numéricas.
 
-Hipótese: Correlação direta com o preço (Cobranca_Mensal mais alta) ou insatisfação técnica específica.
+![Matriz de Correlação](4_matriz_correlacao.png)
+*Figura 5: Heatmap de correlações entre variáveis numéricas.*
 
-Ação Sugerida: Revisar a estratégia de precificação da Fibra e investigar chamados de suporte técnico nessa categoria.
+---
 
-3. A "Zona de Perigo" (Tenure) ⏳
-Diagnóstico: A maior parte dos cancelamentos ocorre nos primeiros meses de contrato.
+## 5. Conclusão e Recomendações
+Com base nos dados visuais e estatísticos, recomendamos:
 
-Ação Sugerida: Implementar um programa de Onboarding (boas-vindas) focado na retenção durante os primeiros 6 meses.
-
-4. Meios de Pagamento 💳
-Diagnóstico: O método "Cheque Eletrônico" apresenta uma taxa de evasão muito superior aos pagamentos automáticos (Cartão de Crédito/Transferência).
-
-Ação Sugerida: Incentivar o cadastro de débito automático para reduzir o atrito de pagamento mensal.
+1.  **Ação Imediata:** Criar campanha de migração de planos **Mensais para Anuais**, oferecendo descontos agressivos.
+2.  **Onboarding:** Focar esforços de retenção nos primeiros **6 meses** do cliente (zona de risco).
+3.  **Financeiro:** Incentivar a troca de "Cheque Eletrônico" por "Cartão de Crédito Automático".
